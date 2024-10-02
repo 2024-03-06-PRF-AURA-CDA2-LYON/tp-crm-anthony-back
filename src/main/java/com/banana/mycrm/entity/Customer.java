@@ -1,9 +1,11 @@
 package com.banana.mycrm.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table
+@Data
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
