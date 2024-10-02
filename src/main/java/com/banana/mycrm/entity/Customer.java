@@ -10,7 +10,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private long id;
+    private Long id;
 
     @Column(length = 100, nullable = false)
     private String company_name;
@@ -41,5 +41,5 @@ public class Customer {
     private String city;
 
     @Column()
-    private int state;
+    private Integer state;
 }
