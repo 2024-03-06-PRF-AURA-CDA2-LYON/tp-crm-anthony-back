@@ -4,7 +4,6 @@ import com.banana.mycrm.entity.Customer;
 import com.banana.mycrm.repository.CustomerRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,12 +18,12 @@ public class CustomerController {
     }
 
     @GetMapping("")
-    public List<Customer> getCustomers(){
+    public Iterable<Customer> getCustomers(){
         return  this.customerRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomer(@PathVariable("id") int id){
+    public Optional<Customer> getCustomer(@PathVariable("id") Long id){
         return  this.customerRepository.findById(id);
     }
 
@@ -34,23 +33,29 @@ public class CustomerController {
     }
 
     @PatchMapping("/{id}")
-    public void updateCustomer(@PathVariable("id") int id, @RequestBody Customer customer){
-        Customer updateCustomer =  this.customerRepository.getReferenceById(id);
-        updateCustomer.setAddress(customer.getAddress());
-        updateCustomer.setCity(customer.getCity());
-        updateCustomer.setCompanyName(customer.getCompanyName());
-        updateCustomer.setCountry(customer.getCountry());
-        updateCustomer.setEmail(customer.getEmail());
-        updateCustomer.setFirstName(customer.getFirstName());
-        updateCustomer.setLastName(customer.getLastName());
-        updateCustomer.setPhoneNumber(customer.getPhoneNumber());
-        updateCustomer.setState(customer.getState());
-        updateCustomer.setZipCode(customer.getZipCode());
-        this.customerRepository.save(customer);
+    public void updateCustomer(@PathVariable("id") Long id, @RequestBody Customer customer){
+        Optional<Customer> updateCustomerOpt =  this.customerRepository.findById(id);
+
+        if (updateCustomerOpt.isPresent()) {
+            Customer updateCustomer = updateCustomerOpt.get();
+
+            updateCustomer.setAddress(customer.getAddress());
+            updateCustomer.setCity(customer.getCity());
+            updateCustomer.setCompanyName(customer.getCompanyName());
+            updateCustomer.setCountry(customer.getCountry());
+            updateCustomer.setEmail(customer.getEmail());
+            updateCustomer.setFirstName(customer.getFirstName());
+            updateCustomer.setLastName(customer.getLastName());
+            updateCustomer.setPhoneNumber(customer.getPhoneNumber());
+            updateCustomer.setState(customer.getState());
+            updateCustomer.setZipCode(customer.getZipCode());
+
+            this.customerRepository.save(customer);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable("id") int id){
+    public void deleteCustomer(@PathVariable("id") Long id){
         this.customerRepository.deleteById(id);
     }
 }
