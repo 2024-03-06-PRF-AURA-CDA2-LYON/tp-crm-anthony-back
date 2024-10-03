@@ -2,13 +2,15 @@ package com.banana.mycrm.controller;
 
 import com.banana.mycrm.entity.Customer;
 import com.banana.mycrm.repository.CustomerRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/customers", produces="application/json")
-@CrossOrigin(origins="localhost")
+@CrossOrigin(origins="http://localhost:8080")
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
@@ -28,12 +30,17 @@ public class CustomerController {
     }
 
     @PostMapping("")
-    public void addCustomer(@RequestBody Customer customer){
-        this.customerRepository.save(customer);
+    public ResponseEntity<String>  addCustomer(@RequestBody Customer customer){
+        try{
+            this.customerRepository.save(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Customer added successfully.");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding customer:" + e.getMessage());
+        }
     }
 
-    @PatchMapping("/{id}")
-    public void updateCustomer(@PathVariable("id") Long id, @RequestBody Customer customer){
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateCustomer(@PathVariable("id") Long id, @RequestBody Customer customer){
         Optional<Customer> updateCustomerOpt =  this.customerRepository.findById(id);
 
         if (updateCustomerOpt.isPresent()) {
@@ -50,12 +57,22 @@ public class CustomerController {
             updateCustomer.setState(customer.getState());
             updateCustomer.setZipCode(customer.getZipCode());
 
-            this.customerRepository.save(customer);
+            this.customerRepository.save(updateCustomer);
+
+            return ResponseEntity.ok("Customer updated successfully.");
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found.");
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable("id") Long id){
-        this.customerRepository.deleteById(id);
+    public ResponseEntity<String> deleteCustomer(@PathVariable("id") Long id){
+        try{
+            this.customerRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Customer deleted successfully.");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting customer:" + e.getMessage());
+        }
+
     }
 }

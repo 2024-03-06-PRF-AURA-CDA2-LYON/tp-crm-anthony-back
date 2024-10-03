@@ -2,13 +2,15 @@ package com.banana.mycrm.controller;
 
 import com.banana.mycrm.entity.Order;
 import com.banana.mycrm.repository.OrderRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/orders", produces="application/json")
-@CrossOrigin(origins="localhost")
+@CrossOrigin(origins="http://localhost:8080")
 public class OrderController {
 
     private final OrderRepository orderRepository;
@@ -28,12 +30,18 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public void addOrder(@RequestBody Order order){
-        this.orderRepository.save(order);
+    public ResponseEntity<String> addOrder(@RequestBody Order order){
+        try{
+            this.orderRepository.save(order);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Order added successfully.");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding order:" + e.getMessage());
+        }
+
     }
 
-    @PatchMapping("/{id}")
-    public void updateOrder(@PathVariable("id") Long id, @RequestBody Order order){
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateOrder(@PathVariable("id") Long id, @RequestBody Order order){
         Optional<Order> updateOrderOpt =  this.orderRepository.findById(id);
 
         if (updateOrderOpt.isPresent()) {
@@ -47,12 +55,21 @@ public class OrderController {
             updateOrder.setTotalExcludeTax(order.getTotalExcludeTax());
             updateOrder.setClient(order.getClient());
 
-            this.orderRepository.save(order);
+            this.orderRepository.save(updateOrder);
+            return ResponseEntity.ok("Order updated successfully.");
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable("id") Long id){
-        this.orderRepository.deleteById(id);
+    public ResponseEntity<String> deleteOrder(@PathVariable("id") Long id){
+        try{
+            this.orderRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Order deleted successfully.");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Order:" + e.getMessage());
+        }
+
     }
 }
