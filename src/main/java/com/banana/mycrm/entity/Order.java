@@ -3,15 +3,15 @@ package com.banana.mycrm.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table
-public class Orders {
+@Table(name="orders")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @Column(length = 100, nullable = false)
-    private String service_type;
+    @Column(length = 100, name="service_type", nullable = false)
+    private String serviceType;
 
     @Column(nullable = false)
     private Integer TVA;
@@ -20,11 +20,11 @@ public class Orders {
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
     private Customer client;
 
-    @Column(nullable = false)
-    private Integer nb_days;
+    @Column(name="nb_days", nullable = false)
+    private Integer nbDays;
 
-    @Column(nullable = false)
-    private Integer total_exclude_tax;
+    @Column(name="total_exclude_tax", nullable = false)
+    private Integer totalExcludeTax;
 
     @Column()
     private Integer state;
