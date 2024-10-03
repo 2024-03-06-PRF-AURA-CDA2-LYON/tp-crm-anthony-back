@@ -12,27 +12,27 @@ public class Customer {
     @Column(nullable = false)
     private Long id;
 
-    @Column(length = 100, nullable = false)
-    private String company_name;
+    @Column(length = 100, nullable = false, name = "company_name")
+    private String companyName;
 
-    @Column(length = 50, nullable = false)
-    private String first_name;
+    @Column(length = 50, nullable = false, name = "first_name")
+    private String firstName;
 
-    @Column(length = 50, nullable = false)
-    private String last_name;
+    @Column(length = 50, nullable = false, name = "last_name")
+    private String lastName;
 
     @Column(length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 15, unique = true)
-    private String phone_number;
+    @Column(length = 15, unique = true, name = "phone_number")
+    private String phoneNumber;
 
     @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String address;
 
-    @Column(length = 30, nullable = false)
-    private String zip_code;
+    @Column(length = 30, nullable = false, name = "zip_code")
+    private String zipCode;
 
     @Column(length = 100, nullable = false)
     private String country;
