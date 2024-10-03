@@ -1,9 +1,9 @@
 package com.banana.mycrm.repository;
 
-import com.banana.mycrm.entity.Customer;
+import com.banana.mycrm.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 }
