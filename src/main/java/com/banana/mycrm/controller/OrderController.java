@@ -47,7 +47,7 @@ public class OrderController {
         if (updateOrderOpt.isPresent()) {
             Order updateOrder = updateOrderOpt.get();
 
-            updateOrder.setTVA(order.getTVA());
+            updateOrder.setTva(order.getTva());
             updateOrder.setComment(order.getComment());
             updateOrder.setNbDays(order.getNbDays());
             updateOrder.setServiceType(order.getServiceType());

@@ -7,6 +7,11 @@ import lombok.Data;
 @Table
 @Data
 public class Customer {
+    public enum CustomerState {
+        ACTIVE,
+        INACTIVE
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -40,6 +45,7 @@ public class Customer {
     @Column(length = 100, nullable = false)
     private String city;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column()
-    private Integer state;
+    private CustomerState state;
 }

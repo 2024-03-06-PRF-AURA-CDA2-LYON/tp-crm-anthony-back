@@ -7,6 +7,12 @@ import lombok.Data;
 @Table(name="orders")
 @Data
 public class Order {
+    public enum OrderState {
+        CANCELED,
+        OPTION,
+        CONFIRMED,
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -16,7 +22,7 @@ public class Order {
     private String serviceType;
 
     @Column(nullable = false)
-    private Integer TVA;
+    private Integer tva;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
@@ -28,8 +34,9 @@ public class Order {
     @Column(name="total_exclude_tax", nullable = false)
     private Integer totalExcludeTax;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column()
-    private Integer state;
+    private OrderState state;
 
     @Lob
     @Column(columnDefinition = "TEXT")
