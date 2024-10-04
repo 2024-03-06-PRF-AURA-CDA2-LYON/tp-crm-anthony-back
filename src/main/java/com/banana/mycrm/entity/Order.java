@@ -26,7 +26,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
-    private Customer client;
+    private Customer clientId;
 
     @Column(name="nb_days", nullable = false)
     private Integer nbDays;
