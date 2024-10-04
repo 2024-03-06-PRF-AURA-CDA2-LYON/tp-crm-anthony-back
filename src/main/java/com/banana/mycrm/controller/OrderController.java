@@ -53,7 +53,7 @@ public class OrderController {
             updateOrder.setServiceType(order.getServiceType());
             updateOrder.setState(order.getState());
             updateOrder.setTotalExcludeTax(order.getTotalExcludeTax());
-            updateOrder.setClient(order.getClient());
+            updateOrder.setClientId(order.getClientId());
 
             this.orderRepository.save(updateOrder);
             return ResponseEntity.ok("Order updated successfully.");
