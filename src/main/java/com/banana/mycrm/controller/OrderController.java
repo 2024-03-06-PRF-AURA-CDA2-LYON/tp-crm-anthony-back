@@ -30,18 +30,17 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> addOrder(@RequestBody Order order){
+    public ResponseEntity<Void> addOrder(@RequestBody Order order){
         try{
             this.orderRepository.save(order);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Order added successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding order:" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateOrder(@PathVariable("id") Long id, @RequestBody Order order){
+    public ResponseEntity<Void> updateOrder(@PathVariable("id") Long id, @RequestBody Order order){
         Optional<Order> updateOrderOpt =  this.orderRepository.findById(id);
 
         if (updateOrderOpt.isPresent()) {
@@ -53,23 +52,22 @@ public class OrderController {
             updateOrder.setServiceType(order.getServiceType());
             updateOrder.setState(order.getState());
             updateOrder.setTotalExcludeTax(order.getTotalExcludeTax());
-            updateOrder.setClient(order.getClient());
+            updateOrder.setClientId(order.getClientId());
 
             this.orderRepository.save(updateOrder);
-            return ResponseEntity.ok("Order updated successfully.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrder(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteOrder(@PathVariable("id") Long id){
         try{
             this.orderRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Order deleted successfully.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Order:" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 }
