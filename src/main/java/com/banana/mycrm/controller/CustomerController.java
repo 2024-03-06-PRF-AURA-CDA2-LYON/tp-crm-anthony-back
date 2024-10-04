@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/customers", produces="application/json")
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin(origins="http://localhost:4200")
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
