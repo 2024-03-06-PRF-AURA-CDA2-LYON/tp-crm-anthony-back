@@ -1,6 +1,8 @@
 package com.banana.mycrm.controller;
 
+import com.banana.mycrm.entity.Customer;
 import com.banana.mycrm.entity.Order;
+import com.banana.mycrm.repository.CustomerRepository;
 import com.banana.mycrm.repository.OrderRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final CustomerRepository customerRepository;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
@@ -52,7 +56,15 @@ public class OrderController {
             updateOrder.setServiceType(order.getServiceType());
             updateOrder.setState(order.getState());
             updateOrder.setTotalExcludeTax(order.getTotalExcludeTax());
-            updateOrder.setClientId(order.getClientId());
+            if (order.getClientId() != null) {
+                Optional<Customer> customerOpt =  this.customerRepository.findById(order.getClientId().getId());
+                if (customerOpt.isPresent()) {
+                    Customer customer = customerOpt.get();
+                    updateOrder.setClientId(customer);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            }
 
             this.orderRepository.save(updateOrder);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
